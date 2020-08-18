@@ -26,7 +26,7 @@ describe('Cog:GetManifest', () => {
     const version: string = JSON.parse(fs.readFileSync('package.json').toString('utf8')).version;
     cogUnderTest.getManifest(null, (err, manifest: CogManifest) => {
       expect(manifest.getName()).to.equal('automatoninc/drift');
-      expect(manifest.getLabel()).to.equal('drift');
+      expect(manifest.getLabel()).to.equal('Drift');
       expect(manifest.getVersion()).to.equal(version);
       done();
     });
@@ -38,11 +38,11 @@ describe('Cog:GetManifest', () => {
         return field.toObject();
       });
 
-      // Useragent auth field
-      const ua: any = authFields.filter(a => a.key === 'userAgent')[0];
-      expect(ua.type).to.equal(FieldDefinition.Type.STRING);
-      expect(ua.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
-      expect(!!ua.help).to.equal(true);
+      // `OAuthToken` auth field
+      const oAuthToken: any = authFields.filter(a => a.key === 'oAuthToken')[0];
+      expect(oAuthToken.type).to.equal(FieldDefinition.Type.STRING);
+      expect(oAuthToken.optionality).to.equal(FieldDefinition.Optionality.REQUIRED);
+      expect(!!oAuthToken.help).to.equal(true);
 
       done();
     });
@@ -53,8 +53,8 @@ describe('Cog:GetManifest', () => {
       const stepDefs: StepDefinition[] = manifest.getStepDefinitionsList();
 
       // Step definitions list includes user-field-equals step.
-      const hasUserFieldEquals: boolean = stepDefs.filter(s => s.getStepId() === 'UserFieldEqualsStep').length === 1;
-      expect(hasUserFieldEquals).to.equal(true);
+      const hasContactFieldEquals: boolean = stepDefs.filter(s => s.getStepId() === 'ContactFieldEqualsStep').length === 1;
+      expect(hasContactFieldEquals).to.equal(true);
 
       done();
     });
