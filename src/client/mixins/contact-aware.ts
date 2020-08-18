@@ -43,4 +43,12 @@ export class ContactAwareMixin {
       .catch(reject);
     });
   }
+
+  public async deleteContact(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.client.delete(`https://driftapi.com/contacts/${id}`)
+        .then(resolve)
+        .catch(reject);
+    });
+  }
 }
