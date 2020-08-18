@@ -2,7 +2,7 @@
 /*tslint:disable:triple-equals*/
 
 import { BaseStep, Field, ExpectedRecord, StepInterface } from '../../core/base-step';
-import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition } from '../../proto/cog_pb';
+import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinition, StepRecord } from '../../proto/cog_pb';
 
 import { baseOperators } from '../../client/constants/operators';
 import * as util from '@run-crank/utilities';
@@ -46,6 +46,10 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       field: 'email',
       description: "Contact's Email Address",
       type: FieldDefinition.Type.EMAIL,
+    }, {
+      field: 'createdAt',
+      description: "Contact's Create Date",
+      type: FieldDefinition.Type.DATETIME,
     }],
   }];
 
@@ -74,7 +78,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       const actualValue = contact.attributes[field]
         ? contact.attributes[field] : null;
 
-      const contactRecord = this.keyValue('contact', 'Contact Record', contact);
+      const contactRecord = this.keyValue('contact', 'Contact Record', this.createRecord(contact));
       const result = this.assert(operator, actualValue, expectedValue, field);
 
       // If the value of the field matches expectations, pass.
@@ -90,6 +94,12 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       }
       return this.error('There was an error during validation: %s', [e.message]);
     }
+  }
+
+  private createRecord(contact: Record<string, any>): StepRecord {
+    const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
+    const record = this.keyValue('contact', 'Created or Updated Contact', obj);
+    return record;
   }
 
 }

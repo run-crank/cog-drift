@@ -29,4 +29,18 @@ export class ContactAwareMixin {
       .catch(reject);
     });
   }
+
+  public async updateContact(id: number, contact: Record<string, any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.client.patch(`https://driftapi.com/contacts/${id}`, {
+        body: JSON.stringify({
+          attributes: contact,
+        }),
+      }).then((value) => {
+        const contact: Record<string, any> = JSON.parse(value).data;
+        resolve(contact);
+      })
+      .catch(reject);
+    });
+  }
 }
