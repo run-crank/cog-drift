@@ -18,8 +18,7 @@ class ClientWrapper {
     // For MVP, we require Drift Integration through a Token (OAuth) only.
     // Later we shall implement refresh token-based/OAuth-based authentication.
     const oAuthToken: string = auth.get('oAuthToken').toString();
-    this.client = clientConstructor;
-    this.client.defaults({
+    this.client = clientConstructor.defaults({
       headers: {
         'Authorization': `Bearer ${oAuthToken}`,
       },
