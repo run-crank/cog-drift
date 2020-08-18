@@ -1,11 +1,11 @@
 {
   "name": "cog-drift",
   "version": "0.1.0",
-  "description": "drift Cog for use with Crank",
+  "description": "Drift Cog for use with Crank",
   "license": "MIT",
   "cog": {
     "name": "automatoninc/drift",
-    "label": "drift",
+    "label": "Drift",
     "homepage": "",
     "authHelpUrl": ""
   },
