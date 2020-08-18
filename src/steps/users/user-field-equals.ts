@@ -99,7 +99,7 @@ export class UserFieldEqualsStep extends BaseStep implements StepInterface {
 
     // Search JSON Placeholder API for user with given email.
     try {
-      apiRes = await this.client.getUserByEmail(email);
+      apiRes = await this.client.getContactByEmail(email);
     } catch (e) {
       return this.error('There was a problem connecting to JSON Placeholder.');
     }
