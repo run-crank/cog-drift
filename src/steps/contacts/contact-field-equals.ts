@@ -99,7 +99,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
 
   private createRecord(contact: Record<string, any>): StepRecord {
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
-    const record = this.keyValue('contact', 'Retrieved Contact', obj);
+    const record = this.keyValue('contact', 'Checked Contact', obj);
     return record;
   }
 
