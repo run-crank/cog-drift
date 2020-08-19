@@ -78,7 +78,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       const actualValue = contact.attributes[field]
         ? contact.attributes[field] : null;
 
-      const contactRecord = this.keyValue('contact', 'Contact Record', this.createRecord(contact));
+      const contactRecord = this.createRecord(contact);
       const result = this.assert(operator, actualValue, expectedValue, field);
 
       // If the value of the field matches expectations, pass.
@@ -92,13 +92,14 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       if (e instanceof util.InvalidOperandError) {
         return this.error(e.message);
       }
+
       return this.error('There was an error during validation: %s', [e.message]);
     }
   }
 
   private createRecord(contact: Record<string, any>): StepRecord {
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
-    const record = this.keyValue('contact', 'Created or Updated Contact', obj);
+    const record = this.keyValue('contact', 'Checked Contact', obj);
     return record;
   }
 
