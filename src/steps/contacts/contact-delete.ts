@@ -60,7 +60,7 @@ export class DeleteContactStep extends BaseStep implements StepInterface {
 
   public createRecord(contact: Record<string, any>): StepRecord {
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
-    const record = this.keyValue('contact', 'Created or Updated Contact', obj);
+    const record = this.keyValue('contact', 'Deleted Contact', obj);
     return record;
   }
 }
