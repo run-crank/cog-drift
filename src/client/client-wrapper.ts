@@ -2,7 +2,7 @@ import * as grpc from 'grpc';
 import * as request from 'request-promise';
 import { Field } from '../core/base-step';
 import { FieldDefinition } from '../proto/cog_pb';
-import { ContactAwareMixin } from './mixins';
+import { ContactAwareMixin, DateAwareMixin } from './mixins';
 
 class ClientWrapper {
   public static expectedAuthFields: Field[] = [{
@@ -27,8 +27,8 @@ class ClientWrapper {
 
 }
 
-interface ClientWrapper extends ContactAwareMixin {}
-applyMixins(ClientWrapper, [ContactAwareMixin]);
+interface ClientWrapper extends ContactAwareMixin, DateAwareMixin {}
+applyMixins(ClientWrapper, [ContactAwareMixin, DateAwareMixin]);
 
 function applyMixins(derivedCtor: any, baseCtors: any[]) {
   baseCtors.forEach((baseCtor) => {

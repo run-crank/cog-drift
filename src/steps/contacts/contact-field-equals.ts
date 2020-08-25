@@ -75,8 +75,10 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       }
 
       // Non-existent fields should always default to `null` for `Set` operators.
-      const actualValue = contact.attributes[field]
+      const fieldValue = contact.attributes[field]
         ? contact.attributes[field] : null;
+
+      const actualValue = this.client.isDate(fieldValue) ? this.client.toDate(fieldValue) : fieldValue;
 
       const contactRecord = this.createRecord(contact);
       const result = this.assert(operator, actualValue, expectedValue, field);
