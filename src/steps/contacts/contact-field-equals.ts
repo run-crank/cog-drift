@@ -47,7 +47,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       description: "Contact's Email Address",
       type: FieldDefinition.Type.EMAIL,
     }, {
-      field: 'createdAt',
+      field: 'start_date',
       description: "Contact's Create Date",
       type: FieldDefinition.Type.DATETIME,
     }],

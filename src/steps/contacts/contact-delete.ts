@@ -23,13 +23,13 @@ export class DeleteContactStep extends BaseStep implements StepInterface {
       type: FieldDefinition.Type.NUMERIC,
       description: 'The contact\'s ID',
     }, {
-      field: 'createdAt',
-      type: FieldDefinition.Type.DATETIME,
-      description: 'The Contact\'s Create Date',
-    }, {
       field: 'email',
       type: FieldDefinition.Type.EMAIL,
       description: 'The Contact\'s Email',
+    }, {
+      field: 'start_date',
+      type: FieldDefinition.Type.DATETIME,
+      description: 'The Contact\'s Create Date',
     }],
     dynamicFields: true,
   }];
