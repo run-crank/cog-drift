@@ -43,7 +43,7 @@ export class DeleteContactStep extends BaseStep implements StepInterface {
 
       // When the email is not associated with any contact, respond with error.
       if (!contact) {
-        return this.error('Contact %s was not found', [email]);
+        return this.fail('Contact %s was not found', [email]);
       }
 
       // Delete the Drift Contact.

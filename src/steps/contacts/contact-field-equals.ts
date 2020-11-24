@@ -71,7 +71,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
     try {
       if (!contact) {
         // If no results were found, return an error.
-        return this.error('No contact found with email %s', [email]);
+        return this.fail('No contact found with email %s', [email]);
       }
 
       // Non-existent fields should always default to `null` for `Set` operators.
