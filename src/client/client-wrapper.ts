@@ -39,7 +39,6 @@ class ClientWrapper {
         } catch (e) {
           reject(Error(`Authentication error, unable to refresh access token: ${e.toString()}`));
         }
-       
       });
     } else {
       const oAuthToken: string = auth.get('oAuthToken').toString();
