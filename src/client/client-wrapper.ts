@@ -13,16 +13,38 @@ class ClientWrapper {
   }];
 
   public client: request.RequestPromiseAPI;
+  clientReady: Promise<boolean>;
 
   constructor (auth: grpc.Metadata, clientConstructor = request) {
-    // For MVP, we require Drift Integration through a Token (OAuth) only.
-    // Later we shall implement refresh token-based/OAuth-based authentication.
-    const oAuthToken: string = auth.get('oAuthToken').toString();
-    this.client = clientConstructor.defaults({
-      headers: {
-        'Authorization': `Bearer ${oAuthToken}`,
-      },
-    });
+    if (auth.get('refreshToken').toString()) {
+      this.clientReady = new Promise(async (resolve, reject) => {
+        const tokenDetails = await clientConstructor({
+          method: 'POST',
+          uri: 'https://driftapi.com/oauth2/token',
+          form: {
+            client_id: auth.get('clientId').toString(),
+            client_secret: auth.get('clientSecret').toString(),
+            refresh_token: auth.get('refreshToken').toString(),
+            grant_type: 'refresh_token',
+          },
+          json: true,
+        });
+        this.client = clientConstructor.defaults({
+          headers: {
+            'Authorization': `Bearer ${tokenDetails.access_token}`,
+          },
+        });
+        resolve(true);
+      });
+    } else {
+      const oAuthToken: string = auth.get('oAuthToken').toString();
+      this.client = clientConstructor.defaults({
+        headers: {
+          'Authorization': `Bearer ${oAuthToken}`,
+        },
+      });
+      this.clientReady = Promise.resolve(true);
+    }
   }
 
 }
