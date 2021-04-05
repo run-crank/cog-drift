@@ -18,23 +18,28 @@ class ClientWrapper {
   constructor (auth: grpc.Metadata, clientConstructor = request) {
     if (auth.get('refreshToken').toString()) {
       this.clientReady = new Promise(async (resolve, reject) => {
-        const tokenDetails = await clientConstructor({
-          method: 'POST',
-          uri: 'https://driftapi.com/oauth2/token',
-          form: {
-            client_id: auth.get('clientId').toString(),
-            client_secret: auth.get('clientSecret').toString(),
-            refresh_token: auth.get('refreshToken').toString(),
-            grant_type: 'refresh_token',
-          },
-          json: true,
-        });
-        this.client = clientConstructor.defaults({
-          headers: {
-            'Authorization': `Bearer ${tokenDetails.access_token}`,
-          },
-        });
-        resolve(true);
+        try {
+          const tokenDetails = await clientConstructor({
+            method: 'POST',
+            uri: 'https://driftapi.com/oauth2/token',
+            form: {
+              client_id: auth.get('clientId').toString(),
+              client_secret: auth.get('clientSecret').toString(),
+              refresh_token: auth.get('refreshToken').toString(),
+              grant_type: 'refresh_token',
+            },
+            json: true,
+          });
+          this.client = clientConstructor.defaults({
+            headers: {
+              'Authorization': `Bearer ${tokenDetails.access_token}`,
+            },
+          });
+          resolve(true);
+        } catch (e) {
+          reject(Error(`Authentication error, unable to refresh access token: ${e.toString()}`));
+        }
+       
       });
     } else {
       const oAuthToken: string = auth.get('oAuthToken').toString();
