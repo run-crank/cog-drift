@@ -2,9 +2,11 @@
 import * as request from 'request-promise';
 
 export class ContactAwareMixin {
+  clientReady: Promise<boolean>;
   client: request.RequestPromiseAPI;
 
   public async getContactByEmail(email: string): Promise<any> {
+    await this.clientReady;
     return new Promise((resolve, reject) => {
       this.client.get(`https://driftapi.com/contacts?email=${email}`)
         .then((value) => {
@@ -17,6 +19,7 @@ export class ContactAwareMixin {
   }
 
   public async createContact(contact: Record<string, any>): Promise<any> {
+    await this.clientReady;
     return new Promise((resolve, reject) => {
       this.client.post('https://driftapi.com/contacts', {
         body: JSON.stringify({
@@ -31,6 +34,7 @@ export class ContactAwareMixin {
   }
 
   public async updateContact(id: number, contact: Record<string, any>): Promise<any> {
+    await this.clientReady;
     return new Promise((resolve, reject) => {
       this.client.patch(`https://driftapi.com/contacts/${id}`, {
         body: JSON.stringify({
@@ -45,6 +49,7 @@ export class ContactAwareMixin {
   }
 
   public async deleteContact(id: number): Promise<any> {
+    await this.clientReady;
     return new Promise((resolve, reject) => {
       this.client.delete(`https://driftapi.com/contacts/${id}`)
         .then(resolve)
