@@ -1,0 +1,32 @@
+scenario: Drift Contact CRUD Steps
+description: >
+  This scenario proves that contact creation, checking, and deletion steps work
+  as expected for Drift API Integration.
+
+tokens:
+  test.email: test@thisisjust.atomatest.com
+  test.name: AtomaTommy
+  test.company: Automaton Inc.
+
+steps:
+- step: Given I create or update a Drift Contact
+  data:
+    contact:
+      email: '{{test.email}}'
+      name: '{{test.name}}'
+      company: '{{test.company}}'
+- step: Then the email field on Drift Contact {{test.email}} should be set
+- step: And the company field on Drift Contact {{test.email}} should be one of {{test.company}}
+- step: And the start_date field on Drift Contact {{test.email}} should be greater than 2019-01-01
+- waitFor: 10
+  step: Given I create or update a Drift Contact
+  data:
+    contact:
+      email: '{{test.email}}'
+      name: '{{test.name}}'
+      company: 'Google'
+- step: Then the email field on Drift Contact {{test.email}} should be set
+- step: And the company field on Drift Contact {{test.email}} should be one of Google
+- step: And the start_date field on Drift Contact {{test.email}} should be greater than 2019-01-01
+- waitFor: 10
+  step: Finally, delete the {{test.email}} Drift Contact
