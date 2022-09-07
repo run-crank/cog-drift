@@ -80,13 +80,13 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
 
       const actualValue = this.client.isDate(fieldValue) ? this.client.toDate(fieldValue) : fieldValue;
 
-      const contactRecord = this.createRecord(contact);
+      const records = this.createRecords(contact, stepData['__stepOrder']);
       const result = this.assert(operator, actualValue, expectedValue, field);
 
       // If the value of the field matches expectations, pass.
       // If the value of the field does not match expectations, fail.
-      return result.valid ? this.pass(result.message, [], [contactRecord])
-        : this.fail(result.message, [], [contactRecord]);
+      return result.valid ? this.pass(result.message, [], records)
+        : this.fail(result.message, [], records);
     } catch (e) {
       if (e instanceof util.UnknownOperatorError) {
         return this.error('%s. Please provide one of: %s', [e.message, baseOperators]);
@@ -99,10 +99,15 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
     }
   }
 
-  private createRecord(contact: Record<string, any>): StepRecord {
+  public createRecords(contact, stepOrder = 1): StepRecord[] {
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
-    const record = this.keyValue('contact', 'Checked Contact', obj);
-    return record;
+
+    const records = [];
+    // Base Record
+    records.push(this.keyValue('company', 'Checked Contact', obj));
+    // Ordered Record
+    records.push(this.keyValue(`company.${stepOrder}`, `Checked Contact from Step ${stepOrder}`, obj));
+    return records;
   }
 
 }

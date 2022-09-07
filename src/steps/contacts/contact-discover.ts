@@ -54,16 +54,22 @@ export class DiscoverContact extends BaseStep implements StepInterface {
         return this.fail('No contact found with email %s', [email]);
       }
 
-      const contactRecord = this.createRecord(contact);
-      return this.pass('Successfully discovered fields on contact', [], [contactRecord]);
+      const records = this.createRecords(contact, stepData['__stepOrder']);
+      return this.pass('Successfully discovered fields on contact', [], records);
     } catch (e) {
       return this.error('There was an error checking the contact: %s', [e.message]);
     }
   }
 
-  private createRecord(contact: Record<string, any>): StepRecord {
+  public createRecords(contact, stepOrder = 1): StepRecord[] {
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
-    return this.keyValue('discoverContact', 'Discovered Contact', obj);
+
+    const records = [];
+    // Base Record
+    records.push(this.keyValue('company', 'Discovered Contact', obj));
+    // Ordered Record
+    records.push(this.keyValue(`company.${stepOrder}`, `Discovered Contact from Step ${stepOrder}`, obj));
+    return records;
   }
 
 }
