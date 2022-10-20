@@ -81,7 +81,7 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       const actualValue = this.client.isDate(fieldValue) ? this.client.toDate(fieldValue) : fieldValue;
 
       const records = this.createRecords(contact, stepData['__stepOrder']);
-      const result = this.assert(operator, actualValue, expectedValue, field);
+      const result = this.assert(operator, actualValue, expectedValue, field, stepData['__piiSuppressionLevel']);
 
       // If the value of the field matches expectations, pass.
       // If the value of the field does not match expectations, fail.
