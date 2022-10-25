@@ -9,6 +9,7 @@ import { Cog } from '../../src/core/cog';
 import { CogManifest } from '../../src/proto/cog_pb';
 import { Metadata } from 'grpc';
 import { Duplex } from 'stream';
+import { Struct } from 'google-protobuf/google/protobuf/struct_pb';
 
 chai.use(sinonChai);
 
@@ -81,6 +82,9 @@ describe('Cog:RunStep', () => {
 
   beforeEach(() => {
     protoStep = new ProtoStep();
+    protoStep.setData(Struct.fromJavaScript({
+      connection: 'anyId',
+    }));
     grpcUnaryCall.request = {
       getStep () { return protoStep; },
       getRequestId () { return requestId; },
