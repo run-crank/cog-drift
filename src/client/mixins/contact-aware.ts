@@ -1,8 +1,8 @@
 
-import { Axios } from 'axios';
+const axios = require('axios');
 
 export class ContactAwareMixin {
-  client: Axios;
+  client: any;
 
   public async getContactByEmail(email: string): Promise<any> {
     return new Promise((resolve, reject) => {

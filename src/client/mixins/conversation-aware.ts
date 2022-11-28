@@ -1,8 +1,5 @@
-
-import { Axios } from 'axios';
-
 export class ConversationAwareMixin {
-  client: Axios;
+  client: any;
 
   public async getConversations(nextPageId: string = null): Promise<any> {
     return this.client.get(`/conversations/list?limit=50${nextPageId ? `&next=${nextPageId}` : ''}`, { transformResponse: [data => data] });

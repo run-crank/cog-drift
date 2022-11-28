@@ -1,8 +1,5 @@
-
-import { Axios } from 'axios';
-
 export class AccountAwareMixin {
-  client: Axios;
+  client: any;
 
   public async getAccountById(id: string): Promise<any> {
     return this.client.get(`/accounts/${id}`, { transformResponse: [data => data] });
