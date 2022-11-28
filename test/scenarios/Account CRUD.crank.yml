@@ -11,6 +11,13 @@ steps:
       name: 'Test04'
       domain: 'www.test04.com'
       targeted: true
-- step: Then the name field on Drift account 105139_test04.com should be set
+- step: Given I update a drift account
+  data:
+    id: 105139_test04.com
+    account:
+      name: 'Test04 Test04'
+      domain: 'www.test04.com'
+      ownerId: '21995'
+- step: Then the name field on Drift account 105139_test04.com should be Test04 Test04
 - step: And the domain field on Drift account 105139_test04.com should be set
 - step: Finally, delete the drift account with id 105139_test04.com
