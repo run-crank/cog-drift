@@ -88,7 +88,7 @@ export class AccountFieldEqualsStep extends BaseStep implements StepInterface {
 
     } catch (e) {
       console.log(e.response);
-      if (e.response.data && JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+      if (e.response.data && JSON.parse(e.response.data).error) {
         return this.error('There was an error getting the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
         ]);
@@ -118,7 +118,7 @@ export class AccountFieldEqualsStep extends BaseStep implements StepInterface {
       if (e instanceof util.InvalidOperandError) {
         return this.error(e.message);
       }
-      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+      if (e.response.data && JSON.parse(e.response.data).error) {
         return this.error('There was an error getting the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
         ]);
