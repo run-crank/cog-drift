@@ -18,7 +18,7 @@ export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
   protected expectedFields: Field[] = [{
     field: 'id',
     type: FieldDefinition.Type.STRING,
-    description: "Conversation's ID",
+    description: "Playbook's ID",
   }, {
     field: 'goal',
     type: FieldDefinition.Type.STRING,
