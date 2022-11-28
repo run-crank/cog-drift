@@ -9,13 +9,13 @@ tokens:
   test.company: Automaton Inc.
 
 steps:
-# - step: Given I create or update a Drift Contact
-#   data:
-#     contact:
-#       email: '{{test.email}}'
-#       name: '{{test.name}}'
-#       company: '{{test.company}}'
+- step: Given I create or update a Drift Contact
+  data:
+    contact:
+      email: '{{test.email}}'
+      name: '{{test.name}}'
+      company: '{{test.company}}'
 - step: Then the email field on Drift Contact {{test.email}} should be set
 - step: And the company field on Drift Contact {{test.email}} should be one of {{test.company}}
 - step: And the start_date field on Drift Contact {{test.email}} should be greater than 2019-01-01
-# - step: Finally, delete the {{test.email}} Drift Contact
+- step: Finally, delete the {{test.email}} Drift Contact

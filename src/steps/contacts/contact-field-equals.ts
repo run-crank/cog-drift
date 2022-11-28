@@ -64,7 +64,6 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
     // Search Drift for a contact given the email.
     try {
       contact = await this.client.getContactByEmail(email);
-      console.log(contact);
     } catch (e) {
       return this.error('There was a problem connecting to Drift API.', [e.toString()]);
     }
