@@ -1,15 +1,15 @@
 
-import * as request from 'request-promise';
+import { Axios } from 'axios';
 
 export class ContactAwareMixin {
-  client: request.RequestPromiseAPI;
+  client: Axios;
 
   public async getContactByEmail(email: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.client.get(`https://driftapi.com/contacts?email=${email}`)
+      this.client.get(`/contacts?email=${email}`, { transformResponse: [data => data] })
         .then((value) => {
           // This endpoint returns an array of contacts. Return the first element only.
-          const contacts: Record<string, any>[] = JSON.parse(value).data;
+          const contacts: Record<string, any>[] = JSON.parse(value.data).data;
           resolve(contacts[0]);
         })
         .catch(reject);
@@ -17,36 +17,32 @@ export class ContactAwareMixin {
   }
 
   public async createContact(contact: Record<string, any>): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.client.post('https://driftapi.com/contacts', {
-        body: JSON.stringify({
-          attributes: contact,
-        }),
-      }).then((value) => {
-        const contact: Record<string, any> = JSON.parse(value).data;
-        resolve(contact);
-      })
-      .catch(reject);
-    });
+    return new Promise(async (resolve, reject) => {
+      await this.client.post('/contacts', JSON.stringify({
+            attributes: contact,
+          }), { transformResponse: [data => data] }).then((value) => {
+          const contact: Record<string, any> = JSON.parse(value.data).data;
+          resolve(contact);
+        })
+        .catch(reject);
+      });
   }
 
   public async updateContact(id: number, contact: Record<string, any>): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.client.patch(`https://driftapi.com/contacts/${id}`, {
-        body: JSON.stringify({
+      this.client.patch(`/contacts/${id}`, JSON.stringify({
           attributes: contact,
-        }),
-      }).then((value) => {
-        const contact: Record<string, any> = JSON.parse(value).data;
-        resolve(contact);
-      })
-      .catch(reject);
+        }), { transformResponse: [data => data] }).then((value) => {
+          const contact: Record<string, any> = JSON.parse(value.data).data;
+          resolve(contact);
+        })
+        .catch(reject);
     });
   }
 
   public async deleteContact(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.client.delete(`https://driftapi.com/contacts/${id}`)
+      this.client.delete(`/contacts/${id}`, { transformResponse: [data => data] })
         .then(resolve)
         .catch(reject);
     });

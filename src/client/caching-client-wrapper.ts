@@ -42,6 +42,51 @@ class CachingClientWrapper {
     return await this.client.deleteContact(id);
   }
 
+  // Account aware methods
+  // -------------------------------------------------------------------
+  
+  public async getAccountById(id: string) {
+    const cachekey = `Drift|Account|${id}|${this.cachePrefix}`;
+    const stored = await this.getCache(cachekey);
+    if (stored) {
+      return stored;
+    } else {
+      const result = await this.client.getAccountById(id);
+      if (result && Object.keys(result).length) {
+        await this.setCache(cachekey, result);
+      }
+      return result;
+    }
+  }
+
+  public async createAccount(account: Record<string, any>) {
+    await this.clearCache();
+    return await this.client.createAccount(account);
+  }
+
+  public async updateAccount(account: Record<string, any>) {
+    await this.clearCache();
+    return await this.client.updateAccount(account);
+  }
+
+  public async deleteAccount(id: string) {
+    await this.clearCache();
+    return await this.client.deleteAccount(id);
+  }
+
+  // Conversation aware methods
+  // -------------------------------------------------------------------
+  
+  public async getConversations(nextPageId: string = null): Promise<any> {
+    await this.clearCache();
+    return await this.client.getConversations(nextPageId);
+  }
+
+  public async getConversationById(conversationId: string): Promise<any> {
+    await this.clearCache();
+    return await this.client.getConversationById(conversationId);
+  }
+
   // Non-cached methods
   // -------------------------------------------------------------------
 
