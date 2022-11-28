@@ -6,19 +6,19 @@ import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinitio
 
 import { baseOperators } from '../../client/constants/operators';
 import * as util from '@run-crank/utilities';
-export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
+export class AccountFieldEqualsStep extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Check a field on a Drift Contact';
+  protected stepName: string = 'Check a field on a Drift Account';
 
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
 
   // tslint:disable-next-line:max-line-length
-  protected stepExpression: string = 'the (?<field>.+) field on Drift contact (?<email>.+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain|match|not match) ?(?<expectedValue>.+)?';
+  protected stepExpression: string = 'the (?<field>.+) field on Drift account (?<id>.+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain|match|not match) ?(?<expectedValue>.+)?';
 
   protected expectedFields: Field[] = [{
-    field: 'email',
-    type: FieldDefinition.Type.EMAIL,
-    description: "Contact's email address",
+    field: 'id',
+    type: FieldDefinition.Type.STRING,
+    description: "Account's ID",
   }, {
     field: 'field',
     type: FieldDefinition.Type.STRING,
@@ -35,52 +35,75 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
   }];
 
   protected expectedRecords: ExpectedRecord[] = [{
-    id: 'contact',
+    id: 'account',
     type: RecordDefinition.Type.KEYVALUE,
     dynamicFields: true,
     fields: [{
-      field: 'id',
-      description: 'Contact ID',
-      type: FieldDefinition.Type.NUMERIC,
+      field: 'accountId',
+      type: FieldDefinition.Type.STRING,
+      description: 'The account\'s ID',
     }, {
-      field: 'email',
-      description: "Contact's Email Address",
-      type: FieldDefinition.Type.EMAIL,
+      field: 'name',
+      type: FieldDefinition.Type.STRING,
+      description: 'The Account\'s Name',
     }, {
-      field: 'start_date',
-      description: "Contact's Create Date",
+      field: 'ownerId',
+      type: FieldDefinition.Type.STRING,
+      description: 'The Account\'s Owner ID',
+    }, {
+      field: 'createDateTime',
       type: FieldDefinition.Type.DATETIME,
+      description: 'The Account\'s Create Date',
     }],
   }];
 
   async executeStep(step: Step): Promise<RunStepResponse> {
-    let contact: any;
+    let account: any;
     const stepData: any = step.getData().toJavaScript();
-    const email: string = stepData.email;
+    const id: string = stepData.id;
     const field: string = stepData.field;
     const expectedValue: string = stepData.expectedValue;
     const operator: string = stepData.operator || 'be';
 
-    // Search Drift for a contact given the email.
+    // Search Drift for a account given the id.
     try {
-      contact = await this.client.getContactByEmail(email);
+      account = await this.client.getAccountById(id);
+
+      account = JSON.parse(account.data).data;
+
+      if (account.customProperties && account.customProperties.length) {
+        account.customProperties.forEach((p) => {
+          account[p.name] = p.value;
+        });
+      }
+
+      delete account.customProperties;
+
+      account.accountId = account.accountId.includes('www.') ? account.accountId.split('www.').join('') : account.accountId;
+
     } catch (e) {
+      console.log(e.response);
+      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+        return this.error('There was an error getting the account in Drift: %s', [
+          JSON.parse(e.response.data).error.message,
+        ]);
+      }
       return this.error('There was a problem connecting to Drift API.', [e.toString()]);
     }
 
     try {
-      if (!contact) {
+      if (!account) {
         // If no results were found, return an error.
-        return this.error('No contact found with email %s', [email]);
+        return this.error('No account found with id %s', [id]);
       }
 
       // Non-existent fields should always default to `null` for `Set` operators.
-      const fieldValue = contact.attributes[field]
-        ? contact.attributes[field] : null;
+      const fieldValue = account[field]
+        ? account[field] : null;
 
       const actualValue = this.client.isDate(fieldValue) ? this.client.toDate(fieldValue) : fieldValue;
 
-      const records = this.createRecords(contact, stepData['__stepOrder']);
+      const records = this.createRecords(account, stepData['__stepOrder']);
       const result = this.assert(operator, actualValue, expectedValue, field, stepData['__piiSuppressionLevel']);
 
       // If the value of the field matches expectations, pass.
@@ -88,26 +111,31 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
       return result.valid ? this.pass(result.message, [], records)
         : this.fail(result.message, [], records);
     } catch (e) {
-      console.log(e.response.data);
+      console.log(e.response);
       if (e instanceof util.UnknownOperatorError) {
         return this.error('%s. Please provide one of: %s', [e.message, baseOperators]);
       }
       if (e instanceof util.InvalidOperandError) {
         return this.error(e.message);
       }
+      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+        return this.error('There was an error getting the account in Drift: %s', [
+          JSON.parse(e.response.data).error.message,
+        ]);
+      }
 
       return this.error('There was an error during validation: %s', [e.message]);
     }
   }
 
-  public createRecords(contact, stepOrder = 1): StepRecord[] {
-    const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
+  public createRecords(account, stepOrder = 1): StepRecord[] {
+    const obj = account;
 
     const records = [];
     // Base Record
-    records.push(this.keyValue('contact', 'Checked Contact', obj));
+    records.push(this.keyValue('account', 'Checked Account', obj));
     // Ordered Record
-    records.push(this.keyValue(`contact.${stepOrder}`, `Checked Contact from Step ${stepOrder}`, obj));
+    records.push(this.keyValue(`account.${stepOrder}`, `Checked Account from Step ${stepOrder}`, obj));
     return records;
   }
 
@@ -115,4 +143,4 @@ export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
 
 // Exports a duplicate of this class, aliased as "Step"
 // See the constructor in src/core/cog.ts to understand why.
-export { ContactFieldEqualsStep as Step };
+export { AccountFieldEqualsStep as Step };

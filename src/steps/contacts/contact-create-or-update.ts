@@ -59,6 +59,7 @@ export class CreateOrUpdateContactStep extends BaseStep implements StepInterface
         return this.fail('Unable to create or update Drift contact');
       }
     } catch (e) {
+      console.log(e.response.data);
       return this.error('There was an error creating or updating the contact in Drift: %s', [
         e.toString(),
       ]);

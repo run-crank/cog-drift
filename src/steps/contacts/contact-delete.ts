@@ -52,6 +52,7 @@ export class DeleteContactStep extends BaseStep implements StepInterface {
 
       return this.pass('Successfully deleted Drift contact %s', [email], [record]);
     } catch (e) {
+      console.log(e.response.data);
       return this.error('There was an error deleting the Drift contact: %s', [
         e.toString(),
       ]);

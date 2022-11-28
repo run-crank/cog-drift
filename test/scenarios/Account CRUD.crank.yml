@@ -1,0 +1,16 @@
+scenario: Drift Account CRUD Steps
+description: >
+  This scenario proves that contact creation, checking, and deletion steps work
+  as expected for Drift API Integration.
+
+steps:
+- step: Given I create a drift account
+  data:
+    account:
+      ownerId: '21995'
+      name: 'Test04'
+      domain: 'www.test04.com'
+      targeted: true
+- step: Then the name field on Drift account 105139_test04.com should be set
+- step: And the domain field on Drift account 105139_test04.com should be set
+- step: Finally, delete the drift account with id 105139_test04.com
