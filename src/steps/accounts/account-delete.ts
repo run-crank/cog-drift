@@ -44,8 +44,8 @@ export class DeleteAccountStep extends BaseStep implements StepInterface {
 
     try {
       await this.client.deleteAccount(id);
-      const record = this.createRecord({accountId: id});
-      
+      const record = this.createRecord({ accountId: id });
+
       return this.pass('Successfully deleted Drift account %s', [id], [record]);
     } catch (e) {
       console.log(e.response);
@@ -54,7 +54,7 @@ export class DeleteAccountStep extends BaseStep implements StepInterface {
           JSON.parse(e.response.data).error.message,
         ]);
       }
-      
+
       return this.error('There was an error creating the account in Drift: %s', [
         e.toString(),
       ]);

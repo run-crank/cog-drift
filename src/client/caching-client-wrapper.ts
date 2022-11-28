@@ -1,6 +1,6 @@
 import { ClientWrapper } from '../client/client-wrapper';
 import { promisify } from 'util';
-​​
+
 class CachingClientWrapper {
   // cachePrefix is scoped to the specific scenario, request, and requestor
   public cachePrefix = `${this.idMap.scenarioId}${this.idMap.requestorId}${this.idMap.connectionId}`;
@@ -44,7 +44,7 @@ class CachingClientWrapper {
 
   // Account aware methods
   // -------------------------------------------------------------------
-  
+
   public async getAccountById(id: string) {
     const cachekey = `Drift|Account|${id}|${this.cachePrefix}`;
     const stored = await this.getCache(cachekey);
@@ -76,7 +76,7 @@ class CachingClientWrapper {
 
   // Conversation aware methods
   // -------------------------------------------------------------------
-  
+
   public async getConversations(nextPageId: string = null): Promise<any> {
     await this.clearCache();
     return await this.client.getConversations(nextPageId);
@@ -155,5 +155,5 @@ class CachingClientWrapper {
     }
   }
 }
-​
+
 export { CachingClientWrapper as CachingClientWrapper };

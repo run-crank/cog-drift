@@ -49,7 +49,7 @@ export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
     // Search Drift for a conversation given the id.
     try {
       const response = await this.client.getPlaybooks();
-      
+
       playbooks = JSON.parse(response.data);
     } catch (e) {
       console.log(e.response);
@@ -83,8 +83,7 @@ export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
       const actualValue = playbook.goals
         ? playbook.goals.map(t => t.name) : [];
 
-
-        const records = this.createRecords(playbook, stepData['__stepOrder']);
+      const records = this.createRecords(playbook, stepData['__stepOrder']);
       if (actualValue.find(m => m.toLowerCase() === expectedValue.toLowerCase())) {
         return this.pass('The "%s" goal was one of the goals in playbook with id %s, as expected', [expectedValue, id], records);
       } else {
@@ -109,7 +108,7 @@ export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
     }
   }
 
-  public createRecords(playbook: Record<string,any>, stepOrder: number = 1): StepRecord[] {
+  public createRecords(playbook: Record<string, any>, stepOrder: number = 1): StepRecord[] {
     const headers = {};
     const headerKeys = Object.keys(playbook.goals[0] || {});
     headerKeys.forEach((key: string) => {

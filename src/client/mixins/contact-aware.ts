@@ -18,21 +18,19 @@ export class ContactAwareMixin {
 
   public async createContact(contact: Record<string, any>): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      await this.client.post('/contacts', JSON.stringify({
-            attributes: contact,
-          }), { transformResponse: [data => data] }).then((value) => {
+      await this.client.post('/contacts', JSON.stringify({ attributes: contact }), { transformResponse: [data => data] })
+        .then((value) => {
           const contact: Record<string, any> = JSON.parse(value.data).data;
           resolve(contact);
         })
         .catch(reject);
-      });
+    });
   }
 
   public async updateContact(id: number, contact: Record<string, any>): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.client.patch(`/contacts/${id}`, JSON.stringify({
-          attributes: contact,
-        }), { transformResponse: [data => data] }).then((value) => {
+      this.client.patch(`/contacts/${id}`, JSON.stringify({ attributes: contact }), { transformResponse: [data => data] })
+        .then((value) => {
           const contact: Record<string, any> = JSON.parse(value.data).data;
           resolve(contact);
         })

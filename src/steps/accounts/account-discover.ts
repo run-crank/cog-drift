@@ -69,13 +69,13 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     // Search Drift for a account given the id.
     try {
       account = await this.client.getAccountById(id);
-      
+
       account = JSON.parse(account.data).data;
 
       if (account.customProperties && account.customProperties.length) {
-        account.customProperties.forEach(p => {
+        account.customProperties.forEach((p) => {
           account[p.name] = p.value;
-        })
+        });
       }
 
       delete account.customProperties;

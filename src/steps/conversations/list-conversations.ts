@@ -43,7 +43,7 @@ export class ListConversation extends BaseStep implements StepInterface {
     let nextOffset = '0';
 
     try {
-      while(hasMore) {
+      while (hasMore) {
         try {
           let response = await this.client.getConversations(nextOffset);
           response = JSON.parse(response.data);
@@ -57,7 +57,7 @@ export class ListConversation extends BaseStep implements StepInterface {
           hasMore = false;
           throw (e);
         }
-        
+
       }
 
     } catch (e) {
@@ -79,7 +79,7 @@ export class ListConversation extends BaseStep implements StepInterface {
     }
   }
 
-  public createRecords(conversations: Record<string,any>[], stepOrder: number = 1): StepRecord[] {
+  public createRecords(conversations: Record<string, any>[], stepOrder: number = 1): StepRecord[] {
     const headers = {};
     const headerKeys = Object.keys(conversations[0] || {});
     headerKeys.forEach((key: string) => {

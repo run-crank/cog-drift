@@ -51,7 +51,7 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
       'createDateTime',
       'updateDateTime',
       'targeted',
-    ]
+    ];
 
     try {
       let data = await this.client.createAccount(account);
@@ -59,9 +59,9 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
       data = JSON.parse(data.data).data;
 
       if (data.customProperties && data.customProperties.length) {
-        data.customProperties.forEach(p => {
+        data.customProperties.forEach((p) => {
           data[p.name] = p.value;
-        })
+        });
       }
 
       delete data.customProperties;

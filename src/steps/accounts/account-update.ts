@@ -12,7 +12,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
   protected expectedFields: Field[] = [{
     field: 'id',
     type: FieldDefinition.Type.STRING,
-    description: `Account's Id`,
+    description: "Account's Id",
   }, {
     field: 'account',
     type: FieldDefinition.Type.MAP,
@@ -54,16 +54,16 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
       if (!existingContact) {
         return this.error('No account found with id %s', [id]);
       }
-      
+
       account['accountId'] = id;
       let data = await this.client.updateAccount(account);
 
       data = JSON.parse(data.data).data;
 
       if (data.customProperties && data.customProperties.length) {
-        data.customProperties.forEach(p => {
+        data.customProperties.forEach((p) => {
           data[p.name] = p.value;
-        })
+        });
       }
 
       delete data.customProperties;
@@ -85,7 +85,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
           JSON.parse(e.response.data).error.message,
         ]);
       }
-      
+
       return this.error('There was an error creating the account in Drift: %s', [
         e.toString(),
       ]);

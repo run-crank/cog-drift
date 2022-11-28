@@ -49,7 +49,7 @@ export class ConversationTagEqualsStep extends BaseStep implements StepInterface
     // Search Drift for a conversation given the id.
     try {
       const response = await this.client.getConversationById(id);
-      
+
       conversation = JSON.parse(response.data).data;
     } catch (e) {
       console.log(e.response);
@@ -75,7 +75,6 @@ export class ConversationTagEqualsStep extends BaseStep implements StepInterface
       // Non-existent fields should always default to `null` for `Set` operators.
       const actualValue = conversation['conversationTags']
         ? conversation['conversationTags'].map(t => t.name) : [];
-
 
       const records = this.createRecords(conversation, stepData['__stepOrder']);
 
@@ -103,13 +102,13 @@ export class ConversationTagEqualsStep extends BaseStep implements StepInterface
     }
   }
 
-  public createRecords(conversations: Record<string,any>, stepOrder: number = 1): StepRecord[] {
+  public createRecords(conversations: Record<string, any>, stepOrder: number = 1): StepRecord[] {
     const headers = {};
     const headerKeys = Object.keys(conversations['conversationTags'][0] || {});
     headerKeys.forEach((key: string) => {
       headers[key] = key;
     });
-    
+
     const records = [];
     // Base Record
     records.push(this.keyValue('conversation', 'Conversations', conversations));
