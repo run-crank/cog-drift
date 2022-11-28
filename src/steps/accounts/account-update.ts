@@ -80,7 +80,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
       }
     } catch (e) {
       console.log(e.response);
-      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+      if (e.response.data && JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
         return this.error('There was an error creating the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
         ]);

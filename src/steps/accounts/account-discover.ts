@@ -11,7 +11,7 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
 
   protected stepName: string = 'Discover fields on a Drift Account';
 
-  protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
+  protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
 
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'discover fields on drift account (?<id>.+)';
@@ -70,8 +70,12 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     try {
       account = await this.client.getAccountById(id);
 
-      account = JSON.parse(account.data).data;
+      if (!account) {
+        // If no results were found, return an error.
+        return this.fail('No account found with id %s', [id]);
+      }
 
+      account = JSON.parse(account.data).data;
       if (account.customProperties && account.customProperties.length) {
         account.customProperties.forEach((p) => {
           account[p.name] = p.value;
@@ -84,7 +88,7 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
 
     } catch (e) {
       console.log(e.response);
-      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+      if (e.response.data && JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
         return this.error('There was an error getting the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
         ]);
@@ -93,21 +97,11 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     }
 
     try {
-      if (!account) {
-        // If no results were found, return an error.
-        return this.error('No account found with id %s', [id]);
-      }
-
-      // Non-existent fields should always default to `null` for `Set` operators.
-      const fieldValue = account[field]
-        ? account[field] : null;
-
-      const actualValue = this.client.isDate(fieldValue) ? this.client.toDate(fieldValue) : fieldValue;
-
       const records = this.createRecords(account, stepData['__stepOrder']);
 
       return this.pass('Successfully discovered fields on lead', [], records);
     } catch (e) {
+      console.log(e);
       console.log(e.response.data);
       if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
         return this.error('There was an error creating the account in Drift: %s', [

@@ -98,7 +98,7 @@ export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
       if (e instanceof util.InvalidOperandError) {
         return this.error(e.message);
       }
-      if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
+      if (e.response.data && JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
         return this.error('There was an error getting the conversation in Drift: %s', [
           JSON.parse(e.response.data).error.message,
         ]);
