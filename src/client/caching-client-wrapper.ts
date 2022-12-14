@@ -87,6 +87,12 @@ class CachingClientWrapper {
     return await this.client.getConversationById(conversationId);
   }
 
+  // Playbook aware methods
+  public async getPlaybooks(): Promise<any> {
+    await this.clearCache();
+    return await this.client.getPlaybooks();
+  }
+
   // Non-cached methods
   // -------------------------------------------------------------------
 
