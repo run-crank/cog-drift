@@ -15,6 +15,7 @@ export interface Field {
   description: string;
   help?: string;
   optionality?: number;
+  bulksupport?: boolean;
 }
 
 export interface ExpectedRecord {
@@ -74,6 +75,12 @@ export abstract class BaseStep {
         expectedField.setOptionality(field.optionality);
       } else {
         expectedField.setOptionality(FieldDefinition.Optionality.REQUIRED);
+      }
+
+      if (field.hasOwnProperty('bulksupport')) {
+        expectedField.setBulksupport(field.bulksupport);
+      } else {
+        expectedField.setBulksupport(false);
       }
 
       stepDefinition.addExpectedFields(expectedField);
