@@ -8,6 +8,8 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
   protected stepName: string = 'Update a Drift account';
   protected stepExpression: string = 'update a drift account';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['update'];
+  protected targetObject: string = 'Account';
 
   protected expectedFields: Field[] = [{
     field: 'id',

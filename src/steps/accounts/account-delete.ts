@@ -8,6 +8,8 @@ export class DeleteAccountStep extends BaseStep implements StepInterface {
   protected stepName: string = 'Delete a Drift account';
   protected stepExpression: string = 'delete the drift account with id (?<id>.+)';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['delete'];
+  protected targetObject: string = 'Account';
 
   protected expectedFields: Field[] = [{
     field: 'id',
