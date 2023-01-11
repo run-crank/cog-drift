@@ -9,9 +9,11 @@ import * as util from '@run-crank/utilities';
 
 export class DiscoverAccountStep extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Discover fields on a Drift Account';
+  protected stepName: string = 'Discover fields on a Drift account';
 
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['discover'];
+  protected targetObject: string = 'Account';
 
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'discover fields on drift account (?<id>.+)';

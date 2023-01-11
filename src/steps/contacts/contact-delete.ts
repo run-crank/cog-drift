@@ -8,6 +8,8 @@ export class DeleteContactStep extends BaseStep implements StepInterface {
   protected stepName: string = 'Delete a Drift contact';
   protected stepExpression: string = 'delete the (?<email>.+) drift contact';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['delete'];
+  protected targetObject: string = 'Contact';
 
   protected expectedFields: Field[] = [{
     field: 'email',

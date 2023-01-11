@@ -6,8 +6,10 @@ import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinitio
 
 export class DiscoverContact extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Discover fields on a Drift Contact';
+  protected stepName: string = 'Discover fields on a Drift contact';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['discover'];
+  protected targetObject: string = 'Contact';
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'discover fields on Drift contact (?<email>.+)';
 

@@ -8,6 +8,8 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
   protected stepName: string = 'Create a Drift account';
   protected stepExpression: string = 'create a drift account';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['create'];
+  protected targetObject: string = 'Account';
 
   protected expectedFields: Field[] = [{
     field: 'account',

@@ -6,8 +6,10 @@ import { FieldDefinition, RunStepResponse, Step, StepDefinition, RecordDefinitio
 
 export class ListConversation extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'List Conversations from Drift';
+  protected stepName: string = 'List conversations from Drift';
   protected stepType: StepDefinition.Type = StepDefinition.Type.ACTION;
+  protected actionList: string[] = ['discover'];
+  protected targetObject: string = 'Conversations';
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'get a list of conversations from drift';
 

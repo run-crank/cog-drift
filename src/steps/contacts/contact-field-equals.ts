@@ -8,9 +8,11 @@ import { baseOperators } from '../../client/constants/operators';
 import * as util from '@run-crank/utilities';
 export class ContactFieldEqualsStep extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Check a field on a Drift Contact';
+  protected stepName: string = 'Check a field on a Drift contact';
 
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
+  protected actionList: string[] = ['check'];
+  protected targetObject: string = 'Contact';
 
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'the (?<field>.+) field on Drift contact (?<email>.+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain|match|not match) ?(?<expectedValue>.+)?';

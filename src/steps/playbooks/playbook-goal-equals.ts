@@ -8,9 +8,11 @@ import { baseOperators } from '../../client/constants/operators';
 import * as util from '@run-crank/utilities';
 export class PlaybookGoalEqualsStep extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Check a a Drift Playbook Goal';
+  protected stepName: string = 'Check a Drift playbook goal';
 
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
+  protected actionList: string[] = ['check'];
+  protected targetObject: string = 'Playbook Goal';
 
   // tslint:disable-next-line:max-line-length
   protected stepExpression: string = 'the (?<goal>.+) goal on Drift playbook (?<id>.+) should be set';
