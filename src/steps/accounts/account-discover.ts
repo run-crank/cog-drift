@@ -87,7 +87,6 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
       return this.pass('Successfully discovered fields on lead', [], records);
     } catch (e) {
       console.log(e);
-      console.log(e.response.data);
       if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
         return this.error('There was an error creating the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
