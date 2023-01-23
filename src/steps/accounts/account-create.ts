@@ -12,9 +12,22 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
   protected targetObject: string = 'Account';
 
   protected expectedFields: Field[] = [{
-    field: 'account',
-    type: FieldDefinition.Type.MAP,
-    description: 'A map of field names to field values',
+    field: 'ownerId',
+    type: FieldDefinition.Type.STRING,
+    description: 'Owner\'s Id',
+  }, {
+    field: 'name',
+    type: FieldDefinition.Type.STRING,
+    description: 'Account\'s Name',
+  }, {
+    field: 'domain',
+    type: FieldDefinition.Type.STRING,
+    description: 'Domain',
+  },  {
+    field: 'targeted',
+    type: FieldDefinition.Type.BOOLEAN,
+    optionality: FieldDefinition.Optionality.OPTIONAL,
+    description: 'Is the account currently targeted?',
   }];
 
   protected expectedRecords: ExpectedRecord[] = [{
@@ -42,21 +55,18 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
 
   async executeStep(step: Step) {
     const stepData: any = step.getData().toJavaScript();
-    const account: Record<string, any> = stepData.account;
-
-    const properties = [ // Properties that are not custom
-      'ownerId',
-      'name',
-      'domain',
-      'accountId',
-      'deleted',
-      'createDateTime',
-      'updateDateTime',
-      'targeted',
-    ];
+    const ownerId: Record<string, any> = stepData.ownerId;
+    const name: Record<string, any> = stepData.name;
+    const domain: Record<string, any> = stepData.domain;
+    const targeted: Record<string, any> = stepData.targeted;
 
     try {
-      let data = await this.client.createAccount(account);
+      let data = await this.client.createAccount({
+        ownerId,
+        name,
+        domain,
+        targeted,
+      });
 
       data = JSON.parse(data.data).data;
 
@@ -73,12 +83,12 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
       const orderedRecord = this.createOrderedRecord(data, stepData['__stepOrder']);
 
       if (data) {
-        return this.pass('Successfully created Drift account %s', [account.name], [record, orderedRecord]);
+        return this.pass('Successfully created Drift account %s', [name], [record, orderedRecord]);
       } else {
         return this.fail('Unable to create Drift account');
       }
     } catch (e) {
-      console.log(e.response);
+      console.log(e.response || e);
       if (JSON.parse(e.response.data).error) {
         return this.error('There was an error creating the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
