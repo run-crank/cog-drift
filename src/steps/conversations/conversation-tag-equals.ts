@@ -8,7 +8,7 @@ import { baseOperators } from '../../client/constants/operators';
 import * as util from '@run-crank/utilities';
 export class ConversationTagEqualsStep extends BaseStep implements StepInterface {
 
-  protected stepName: string = 'Check a a Drift conversation tag';
+  protected stepName: string = 'Check a Drift conversation tag';
 
   protected stepType: StepDefinition.Type = StepDefinition.Type.VALIDATION;
   protected actionList: string[] = ['check'];
