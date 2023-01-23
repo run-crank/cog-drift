@@ -72,7 +72,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
         return this.error('No account found with id %s', [id]);
       }
 
-      var account = {
+      const account = {
         ownerId,
         name,
         domain,
