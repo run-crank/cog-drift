@@ -22,19 +22,6 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     field: 'id',
     type: FieldDefinition.Type.STRING,
     description: "Account's ID",
-  }, {
-    field: 'field',
-    type: FieldDefinition.Type.STRING,
-    description: 'Field name to check',
-  }, {
-    field: 'operator',
-    type: FieldDefinition.Type.STRING,
-    description: 'Check Logic (be, not be, contain, not contain, be greater than, be less than, be set, not be set, be one of, or not be one of)',
-  }, {
-    field: 'expectedValue',
-    type: FieldDefinition.Type.ANYSCALAR,
-    optionality: FieldDefinition.Optionality.OPTIONAL,
-    description: 'Expected field value',
   }];
 
   protected expectedRecords: ExpectedRecord[] = [{
@@ -64,9 +51,6 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     let account: any;
     const stepData: any = step.getData().toJavaScript();
     const id: string = stepData.id;
-    const field: string = stepData.field;
-    const expectedValue: string = stepData.expectedValue;
-    const operator: string = stepData.operator || 'be';
 
     // Search Drift for a account given the id.
     try {
@@ -89,7 +73,6 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
       account.accountId = account.accountId.includes('www.') ? account.accountId.split('www.').join('') : account.accountId;
 
     } catch (e) {
-      console.log(e.response);
       if (e.response.data && JSON.parse(e.response.data).error) {
         return this.error('There was an error getting the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
