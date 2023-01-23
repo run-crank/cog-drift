@@ -16,9 +16,22 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
     type: FieldDefinition.Type.STRING,
     description: "Account's Id",
   }, {
-    field: 'account',
-    type: FieldDefinition.Type.MAP,
-    description: 'A map of field names to field values',
+    field: 'ownerId',
+    type: FieldDefinition.Type.STRING,
+    description: 'Owner\'s Id',
+  }, {
+    field: 'name',
+    type: FieldDefinition.Type.STRING,
+    description: 'Account\'s Name',
+  }, {
+    field: 'domain',
+    type: FieldDefinition.Type.STRING,
+    description: 'Domain',
+  },  {
+    field: 'targeted',
+    type: FieldDefinition.Type.BOOLEAN,
+    optionality: FieldDefinition.Optionality.OPTIONAL,
+    description: 'Is the account currently targeted?',
   }];
 
   protected expectedRecords: ExpectedRecord[] = [{
@@ -47,8 +60,10 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
   async executeStep(step: Step) {
     const stepData: any = step.getData().toJavaScript();
     const id: string = stepData.id;
-    const account: Record<string, any> = stepData.account;
-
+    const ownerId: Record<string, any> = stepData.ownerId;
+    const name: Record<string, any> = stepData.name;
+    const domain: Record<string, any> = stepData.domain;
+    const targeted: Record<string, any> = stepData.targeted;
     try {
       const existingContact: Record<string, any> = await this.client.getAccountById(id);
 
@@ -56,6 +71,13 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
       if (!existingContact) {
         return this.error('No account found with id %s', [id]);
       }
+
+      const account = {
+        ownerId,
+        name,
+        domain,
+        targeted,
+      };
 
       account['accountId'] = id;
       let data = await this.client.updateAccount(account);
@@ -81,7 +103,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
         return this.fail('Unable to update Drift account');
       }
     } catch (e) {
-      console.log(e.response);
+      console.log(e.response || e);
       if (e.response.data && JSON.parse(e.response.data).error) {
         return this.error('There was an error creating the account in Drift: %s', [
           JSON.parse(e.response.data).error.message,
