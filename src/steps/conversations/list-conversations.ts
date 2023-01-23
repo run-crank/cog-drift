@@ -88,6 +88,18 @@ export class ListConversation extends BaseStep implements StepInterface {
       headers[key] = key;
     });
     const records = [];
+
+    // Sort by updatedAy
+    conversations.sort((a, b) => b.updatedAt < a.updatedAt ? -1 : 1 )
+
+    conversations.forEach((c, index) => {
+      Object.keys(c).forEach(key => {
+        if (['createdAt', 'updatedAt'].includes(key)) {
+          conversations[index][key] = this.client.toDate(c[key]);
+        }
+      })
+    })
+
     // Base Record
     records.push(this.table('conversation', 'List Conversations', headers, conversations));
     // Ordered Record
