@@ -94,7 +94,7 @@ export class UpdateAccountStep extends BaseStep implements StepInterface {
 
       data.accountId = data.accountId.includes('www.') ? data.accountId.split('www.').join('') : data.accountId;
 
-      data.accountId = `${data.accountId.split('_')[0]}_${data.domain}`
+      data.accountId = `${data.accountId.split('_')[0]}_${data.domain}`;
 
       const record = this.createRecord(data);
       const orderedRecord = this.createOrderedRecord(data, stepData['__stepOrder']);
