@@ -27,7 +27,7 @@ describe('DiscoverContact', () => {
     const stepDef: StepDefinition = stepUnderTest.getDefinition();
     expect(stepDef.getStepId()).to.equal('DiscoverContact');
     expect(stepDef.getName()).to.equal('Discover fields on a Drift contact');
-    expect(stepDef.getExpression()).to.equal('discover fields on Drift contact (?<email>.+)');
+    expect(stepDef.getExpression()).to.equal('discover fields on drift contact (?<email>.+)');
     expect(stepDef.getType()).to.equal(StepDefinition.Type.ACTION);
   });
 

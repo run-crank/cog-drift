@@ -84,7 +84,7 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
     try {
       const records = this.createRecords(account, stepData['__stepOrder']);
 
-      return this.pass('Successfully discovered fields on lead', [], records);
+      return this.pass('Successfully discovered fields on account', [], records);
     } catch (e) {
       console.log(e);
       if (JSON.parse(e.response.data).error && JSON.parse(e.response.data).error.type === 'not_found') {
@@ -102,9 +102,9 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
 
     const records = [];
     // Base Record
-    records.push(this.keyValue('discoverAccount', 'Checked Account', obj));
+    records.push(this.keyValue('discoverAccount', 'Discovered Account', obj));
     // Ordered Record
-    records.push(this.keyValue(`discoverAccount.${stepOrder}`, `Checked Account from Step ${stepOrder}`, obj));
+    records.push(this.keyValue(`discoverAccount.${stepOrder}`, `Discovered Account from Step ${stepOrder}`, obj));
     return records;
   }
 
