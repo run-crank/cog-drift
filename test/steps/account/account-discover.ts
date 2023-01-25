@@ -27,7 +27,7 @@ describe('DiscoverAccount', () => {
     const stepDef: StepDefinition = stepUnderTest.getDefinition();
     expect(stepDef.getStepId()).to.equal('DiscoverAccountStep');
     expect(stepDef.getName()).to.equal('Discover fields on a Drift account');
-    expect(stepDef.getExpression()).to.equal('discover fields on drift account (?<id>.+)');
+    expect(stepDef.getExpression()).to.equal('discover fields on drift account with id (?<id>.+)');
     expect(stepDef.getType()).to.equal(StepDefinition.Type.ACTION);
   });
 

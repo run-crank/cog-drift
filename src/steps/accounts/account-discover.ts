@@ -16,7 +16,7 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
   protected targetObject: string = 'Account';
 
   // tslint:disable-next-line:max-line-length
-  protected stepExpression: string = 'discover fields on drift account (?<id>.+)';
+  protected stepExpression: string = 'discover fields on drift account with id (?<id>.+)';
 
   protected expectedFields: Field[] = [{
     field: 'id',
@@ -102,9 +102,9 @@ export class DiscoverAccountStep extends BaseStep implements StepInterface {
 
     const records = [];
     // Base Record
-    records.push(this.keyValue('account', 'Checked Account', obj));
+    records.push(this.keyValue('discoverAccount', 'Checked Account', obj));
     // Ordered Record
-    records.push(this.keyValue(`account.${stepOrder}`, `Checked Account from Step ${stepOrder}`, obj));
+    records.push(this.keyValue(`discoverAccount.${stepOrder}`, `Checked Account from Step ${stepOrder}`, obj));
     return records;
   }
 
