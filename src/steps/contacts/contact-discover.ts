@@ -11,7 +11,7 @@ export class DiscoverContact extends BaseStep implements StepInterface {
   protected actionList: string[] = ['discover'];
   protected targetObject: string = 'Contact';
   // tslint:disable-next-line:max-line-length
-  protected stepExpression: string = 'discover fields on Drift contact (?<email>.+)';
+  protected stepExpression: string = 'discover fields on drift contact (?<email>.+)';
 
   protected expectedFields: Field[] = [{
     field: 'email',
