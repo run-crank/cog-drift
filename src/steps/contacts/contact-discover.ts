@@ -69,9 +69,9 @@ export class DiscoverContact extends BaseStep implements StepInterface {
 
     const records = [];
     // Base Record
-    records.push(this.keyValue('contact', 'Discovered Contact', obj));
+    records.push(this.keyValue('discoverContact', 'Discovered Contact', obj));
     // Ordered Record
-    records.push(this.keyValue(`contact.${stepOrder}`, `Discovered Contact from Step ${stepOrder}`, obj));
+    records.push(this.keyValue(`discoverContact.${stepOrder}`, `Discovered Contact from Step ${stepOrder}`, obj));
     return records;
   }
 

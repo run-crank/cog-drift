@@ -15,7 +15,7 @@ export class AccountFieldEqualsStep extends BaseStep implements StepInterface {
   protected targetObject: string = 'Account';
 
   // tslint:disable-next-line:max-line-length
-  protected stepExpression: string = 'the (?<field>.+) field on Drift account (?<id>.+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain|match|not match) ?(?<expectedValue>.+)?';
+  protected stepExpression: string = 'the (?<field>.+) field on Drift account with id (?<id>.+) should (?<operator>be set|not be set|be less than|be greater than|be one of|be|contain|not be one of|not be|not contain|match|not match) ?(?<expectedValue>.+)?';
 
   protected expectedFields: Field[] = [{
     field: 'id',
