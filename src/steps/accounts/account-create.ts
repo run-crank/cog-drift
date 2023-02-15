@@ -80,10 +80,11 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
       data.accountId = data.accountId.includes('www.') ? data.accountId.split('www.').join('') : data.accountId;
 
       const record = this.createRecord(data);
+      const passingRecord = this.createPassingRecord(data, ['ownerId', 'name', 'domain', 'targeted']);
       const orderedRecord = this.createOrderedRecord(data, stepData['__stepOrder']);
 
       if (data) {
-        return this.pass('Successfully created Drift account %s', [name], [record, orderedRecord]);
+        return this.pass('Successfully created Drift account %s', [name], [record, passingRecord, orderedRecord]);
       } else {
         return this.fail('Unable to create Drift account');
       }
@@ -104,6 +105,18 @@ export class CreateAccountStep extends BaseStep implements StepInterface {
     const obj = account;
     const record = this.keyValue('account', 'Created Account', obj);
     return record;
+  }
+
+  public createPassingRecord(data, fields): StepRecord {
+    const filteredData = {};
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        if (fields.includes(key)) {
+          filteredData[key] = data[key];
+        }
+      });
+    }
+    return this.keyValue('exposeOnPass:account', 'Created Account', filteredData);
   }
 
   public createOrderedRecord(account: Record<string, any>, stepOrder = 1): StepRecord {

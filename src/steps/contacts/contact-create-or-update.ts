@@ -53,10 +53,11 @@ export class CreateOrUpdateContactStep extends BaseStep implements StepInterface
       }
 
       const record = this.createRecord(modifiedContact);
+      const passingRecord = this.createPassingRecord(modifiedContact, Object.keys(contact));
       const orderedRecord = this.createOrderedRecord(modifiedContact, stepData['__stepOrder']);
 
       if (modifiedContact) {
-        return this.pass('Successfully created or updated Drift contact %s', [email], [record, orderedRecord]);
+        return this.pass('Successfully created or updated Drift contact %s', [email], [record, passingRecord, orderedRecord]);
       } else {
         return this.fail('Unable to create or update Drift contact');
       }
@@ -72,6 +73,19 @@ export class CreateOrUpdateContactStep extends BaseStep implements StepInterface
     const obj = { id: contact.id, createdAt: contact.createdAt, ...contact.attributes };
     const record = this.keyValue('contact', 'Created or Updated Contact', obj);
     return record;
+  }
+
+  public createPassingRecord(data, fields): StepRecord {
+    const obj = { id: data.id, createdAt: data.createdAt, ...data.attributes };
+    const filteredData = {};
+    if (obj) {
+      Object.keys(obj).forEach((key) => {
+        if (fields.includes(key)) {
+          filteredData[key] = obj[key];
+        }
+      });
+    }
+    return this.keyValue('exposeOnPass:contact', 'Created or Updated Contact', filteredData);
   }
 
   public createOrderedRecord(contact: Record<string, any>, stepOrder = 1): StepRecord {
