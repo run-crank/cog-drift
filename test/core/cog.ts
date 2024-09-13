@@ -27,7 +27,7 @@ describe('Cog:GetManifest', () => {
   it('should return expected cog metadata', (done) => {
     const version: string = JSON.parse(fs.readFileSync('package.json').toString('utf8')).version;
     cogUnderTest.getManifest(null, (err, manifest: CogManifest) => {
-      expect(manifest.getName()).to.equal('automatoninc/drift');
+      expect(manifest.getName()).to.equal('stackmoxie/drift');
       expect(manifest.getLabel()).to.equal('Drift');
       expect(manifest.getVersion()).to.equal(version);
       done();
